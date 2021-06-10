@@ -1,5 +1,4 @@
 package connect;
-
 import data.ManageUser;
 import handler.ClientHandler;
 import lombok.Getter;
@@ -35,7 +34,6 @@ public class Server extends Thread{
                 if(userList.size() != 0)
                 {
                     ManageUser.writeListUser(userList);
-
                 }
                 ClientHandler clientHandler = new ClientHandler(this,client);
                 clientHandlers.add(clientHandler);
@@ -67,4 +65,5 @@ public class Server extends Thread{
     {
         return userList;
     }
+
 }

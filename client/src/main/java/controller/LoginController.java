@@ -2,6 +2,7 @@ package controller;
 
 import services.Connection;
 import view.LoginView;
+import view.OnlineUserListView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +43,7 @@ public class LoginController {
 
             String userName = loginView.getUserName();
             String password = loginView.getPassword();
+            OnlineUserListView onlineUserListView = new OnlineUserListView(userName);
 
             if(userName.trim().length() != 0 && password.trim().length() != 0)
             {
@@ -49,9 +51,13 @@ public class LoginController {
                 {
                     setVisibleLoginView(false);
                     System.out.printf("login successfully.\n");
+                    client.managerViews.add(onlineUserListView);
+                    OnlineUserListController onlineUserListController = new OnlineUserListController(client, onlineUserListView);
+
                 }
                 else
                 {
+                    loginView.showMessage("Login failed!");
                     System.out.println("login failed.\n");
                 }
             }

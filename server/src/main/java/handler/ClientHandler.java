@@ -2,7 +2,9 @@ package handler;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.chat.socket.commoms.enums.StatusCode;
 import connect.Server;
@@ -28,7 +30,6 @@ public class ClientHandler extends Thread {
 
     }
 
-
     public void disconnectClient() {
         server.getClientHandlers().remove(this);
     }
@@ -51,9 +52,12 @@ public class ClientHandler extends Thread {
                             responseSignUp(tokens);
                             break;
                         }
-                        case  "SIGN_IN":
-                        {
+                        case "SIGN_IN": {
                             responseLogIn(tokens);
+                            break;
+                        }
+                        case "GET_USERS_ONLINE": {
+                            responseUsersOnline();
                             break;
                         }
                     }
@@ -61,7 +65,7 @@ public class ClientHandler extends Thread {
 
             }
         } catch (IOException e) {
-             e.printStackTrace();
+            e.printStackTrace();
             System.out.println("exception at run client handle\n");
         } finally {
             ManageUser.writeListUser(server.getUserList());
@@ -73,25 +77,50 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public void responseLogIn(String[] tokens)
-    {
+    public String getUserName() {
+        return onlineUser.getUserName();
+    }
+
+    public void responseUsersOnline() {
+
+        List<ClientHandler> onlineUsers = server.getUserOnline();
+        String response = "";
+
+        for (ClientHandler client : onlineUsers) {
+            response = response + client.getUserName() + " ";
+        }
+        response = response.trim() + '\n';
+        for (ClientHandler client : onlineUsers) {
+            client.sendMessage(response);
+        }
+
+    }
+
+    public void responseLogIn(String[] tokens) {
         if (tokens.length == 3) {
 
             List<User> userList = server.getUserList();
             for (User user : userList) {
-                if (user.getUserName().equals(tokens[1]) && user.getPassWord().equals(tokens[2])){
+                if (user.getUserName().equals(tokens[1]) && user.getPassWord().equals(tokens[2])) {
                     try {
                         this.onlineUser = new User(user.getUserName(), user.getPassWord());
                         out.write((StatusCode.OK.toString() + "\n").getBytes());
+
                         return;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
+            try {
+                out.write((StatusCode.FAILED.toString() + "\n").getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
     }
+
     public void responseSignUp(String[] tokens) {
 
         if (tokens.length == 3) {
@@ -117,6 +146,14 @@ public class ClientHandler extends Thread {
                 e.printStackTrace();
             }
 
+        }
+    }
+    void sendMessage(String message)
+    {
+        try {
+            out.write(message.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
