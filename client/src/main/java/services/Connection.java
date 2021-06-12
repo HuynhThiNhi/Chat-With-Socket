@@ -2,7 +2,8 @@ package services;
 
 
 import com.chat.socket.commoms.enums.Action;
-import view.OnlineUserListView;
+import view.ChattingView;
+
 
 import java.io.*;
 import java.net.Socket;
@@ -12,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Connection{
+public class Connection {
     String username;
     private Socket clientSocket;
     private InputStream in;
@@ -23,24 +24,25 @@ public class Connection{
     public List<ManagerView> managerViews = new ArrayList<>();
 
 
-    public Connection(String ip, int port)
-    {
+    public Connection(String ip, int port) {
         this.ip = ip;
         this.port = port;
         startConnection();
 
     }
 
-    public Socket getClientSocket()
-    {
+    public String getUsername() {
+        return username;
+    }
+
+    public Socket getClientSocket() {
         return clientSocket;
     }
 
-    public  void startConnection()
-    {
+    public void startConnection() {
         try {
-            this.clientSocket = new Socket(ip,port);
-            this.out =clientSocket.getOutputStream();
+            this.clientSocket = new Socket(ip, port);
+            this.out = clientSocket.getOutputStream();
             this.in = clientSocket.getInputStream();
             this.bufferedReader = new BufferedReader(new InputStreamReader(in));
         } catch (IOException e) {
@@ -64,23 +66,46 @@ public class Connection{
 //        }
     }
 
-    public boolean login(String username, String password)
-    {
-        if(LoginService.requestLogin(out, bufferedReader, username, password))
-        {
+
+    public void readingMessage(String[] tokens) {
+
+        String sender = tokens[1];
+        String message = "";
+        for (int i = 2; i < tokens.length; i++)
+            message = message + " " + tokens[i];
+
+        List<ChattingView> chattingViewList = ManagerChattingViews.chattingViews.stream().filter(chattingView -> username.equals(chattingView.getSender())).toList();
+        if (chattingViewList == null)
+            return;
+        ChattingView chatting = chattingViewList.stream().filter(chattingView -> sender.equals(chattingView.getReceiver())).findFirst().orElse(null);
+
+        if(chatting != null)
+            chatting.addMessageToViewChatting(sender, message);
+
+    }
+
+    public void sendMessage(String receiver, String message) {
+        SendMessageService.sendMessage(out, message, receiver);
+    }
+
+    public boolean login(String username, String password) {
+        if (LoginService.requestLogin(out, bufferedReader, username, password)) {
             this.username = username;
             return true;
         }
 
         return false;
     }
-    public boolean signup(String username, String password)
-    {
-        return SignUpService.requestSignUp(out,bufferedReader,username,password);
-    }
-    public void getListUserOnline()
+
+    public void logout(String username)
     {
 
+    }
+    public boolean signup(String username, String password) {
+        return SignUpService.requestSignUp(out, bufferedReader, username, password);
+    }
+
+    public void getListUserOnline() {
         try {
             out.write((Action.GET_USERS_ONLINE.toString() + "\n").getBytes());
         } catch (IOException e) {
@@ -88,45 +113,55 @@ public class Connection{
         }
         startReadingResponse();
 
-
     }
-    public void startReadingResponse()
-    {
-        Thread thread = new Thread()
-        {
+
+    public void startReadingResponse() {
+        Thread thread = new Thread() {
             @Override
             public void run() {
-                readListOnlineUsers();
+                try {
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        String[] tokens = line.split(" ");
+                        if (tokens.length > 0) {
+
+                            String cmd = tokens[0];
+
+                            switch (cmd) {
+
+                                case "SEND_MESSAGE_TO_USER_SPECIFIC": {
+
+                                    readingMessage(tokens);
+                                    break;
+                                }
+                                default: {
+                                    readListOnlineUsers(line);
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+
+                }
             }
         };
         thread.start();
 
     }
-    public void updateListOnlineUsers(List<String> users)
-    {
 
-        for (ManagerView managerView: managerViews) {
-           users.remove(username);
-            managerView.showListUserOnline(users);
-        }
-    }
-    public void readListOnlineUsers() {
+    public void updateListOnlineUsers(List<String> users) {
 
-        try {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                List<String> users = new LinkedList<>(Arrays.asList(line.split(" ")));
-                updateListOnlineUsers(users);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+        for (ManagerView managerView : managerViews) {
+            users.remove(username);
+            if (users.size() != 0)
+                managerView.showListUserOnline(users);
         }
     }
 
+    public void readListOnlineUsers(String line) {
 
-
-
+        List<String> users = new LinkedList<>(Arrays.asList(line.split(" ")));
+        updateListOnlineUsers(users);
+    }
 
 }

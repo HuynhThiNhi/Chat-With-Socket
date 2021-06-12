@@ -2,10 +2,10 @@ package handler;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+
+import com.chat.socket.commoms.enums.Action;
 import com.chat.socket.commoms.enums.StatusCode;
 import connect.Server;
 import data.ManageUser;
@@ -27,7 +27,6 @@ public class ClientHandler extends Thread {
         in = client.getInputStream();
         out = client.getOutputStream();
         bufferedReader = new BufferedReader(new InputStreamReader(in));
-
     }
 
     public void disconnectClient() {
@@ -46,6 +45,7 @@ public class ClientHandler extends Thread {
                 if (tokens.length != 0) {
 
                     String request = tokens[0];
+
                     switch (request) {
 
                         case "SIGN_UP": {
@@ -58,6 +58,11 @@ public class ClientHandler extends Thread {
                         }
                         case "GET_USERS_ONLINE": {
                             responseUsersOnline();
+                            break;
+                        }
+                        case "SEND_MESSAGE_TO_USER_SPECIFIC":
+                        {
+                            sendMessageToUserSpecific(tokens);
                             break;
                         }
                     }
@@ -77,8 +82,24 @@ public class ClientHandler extends Thread {
         }
     }
 
+    public boolean  sendMessageToUserSpecific(String[] tokens) {
+
+        String receiver = tokens[1];
+        String message = "";
+        for (int i = 2; i < tokens.length; i++)
+            message = message + " " + tokens[i];
+        ClientHandler receiverHandler = server.getClientHandlers().stream().filter(clientHandler -> receiver.equals(clientHandler.getUserName()))
+                .findFirst().orElse(null);
+        if(receiverHandler != null)
+        {
+            receiverHandler.sendMessage(Action.SEND_MESSAGE_TO_USER_SPECIFIC.toString() + " " + onlineUser.getUserName() + " " + message + "\n");
+        }
+        return true;
+    }
     public String getUserName() {
-        return onlineUser.getUserName();
+        if(onlineUser != null)
+            return onlineUser.getUserName();
+        return null;
     }
 
     public void responseUsersOnline() {
@@ -87,11 +108,13 @@ public class ClientHandler extends Thread {
         String response = "";
 
         for (ClientHandler client : onlineUsers) {
-            response = response + client.getUserName() + " ";
+            if (client.getUserName() != null)
+                response = response + client.getUserName() + " ";
         }
         response = response.trim() + '\n';
         for (ClientHandler client : onlineUsers) {
-            client.sendMessage(response);
+            if(client.getUserName() != null)
+                client.sendMessage(response);
         }
 
     }

@@ -6,5 +6,6 @@ public enum  Action {
     CHAT_ALL,
     DISCONNECT,
     SIGN_UP,
-    SIGN_IN
+    SIGN_IN,
+    FILE
 }

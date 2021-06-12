@@ -5,6 +5,9 @@ import view.emoji.EmojiPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ChattingView extends javax.swing.JFrame {
 
@@ -22,11 +25,26 @@ public class ChattingView extends javax.swing.JFrame {
     private DefaultListModel<String> listModel;
     // End of variables declaration
 
-    public ChattingView() {
+    public static List<String> receiverList = new ArrayList<>();
+    private String sender;
+    private String receiver;
+
+    public ChattingView(String sender, String receiver) {
         initComponents();
         this.setVisible(true);
         this.setResizable(false);
         emojiPanel.setVisible(false);
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public String getReceiver()
+    {
+        return receiver;
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +65,6 @@ public class ChattingView extends javax.swing.JFrame {
 
         emojiPanel.setVisible(true);
         emojiPanel.setPreferredSize(new Dimension(50, 250));
-
 
 
         jCheckBox1.setText("jCheckBox1");
@@ -127,24 +144,47 @@ public class ChattingView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
-    public  JTextField getInputField() {
+    public String getMessage() {
+        return messageTxt.getText();
+    }
+
+    public void deleteMessageFromText() {
+        messageTxt.setText("");
+    }
+
+    public void addMessageToViewChatting(String sender, String message) {
+        listModel.addElement(sender + ": " + message);
+    }
+
+    public void showEmoji() {
+        emojiPanel.setVisible(true);
+    }
+
+    public void setTitle(String sender, String receiver) {
+        this.setTitle("from " + sender + " to " + receiver);
+    }
+
+    public JTextField getInputField() {
         return messageTxt;
     }
 
-    public  void setInputField(String input) {
+    public void setInputField(String input) {
         messageTxt.setText(input);
     }
 
-    public void addExitListener(ActionListener actionListener)
-    {
+    public void addExitListener(ActionListener actionListener) {
         exitBtn.addActionListener(actionListener);
     }
-    public void addSendFileListener(ActionListener actionListener)
-    {
+
+    public void addSendFileListener(ActionListener actionListener) {
         sendFileBtn.addActionListener(actionListener);
     }
-    public void addEmojiListener(ActionListener actionListener)
-    {
+
+    public void addEmojiListener(ActionListener actionListener) {
         emojiBtn.addActionListener(actionListener);
+    }
+
+    public void addMessageListener(ActionListener actionListener) {
+        messageTxt.addActionListener(actionListener);
     }
 }

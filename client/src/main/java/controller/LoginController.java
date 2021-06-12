@@ -41,6 +41,7 @@ public class LoginController {
         @Override
         public void actionPerformed(ActionEvent e) {
 
+
             String userName = loginView.getUserName();
             String password = loginView.getPassword();
             OnlineUserListView onlineUserListView = new OnlineUserListView(userName);
@@ -49,9 +50,10 @@ public class LoginController {
             {
                 if(client.login(userName,password))
                 {
+                    client.managerViews.add(onlineUserListView);
                     setVisibleLoginView(false);
                     System.out.printf("login successfully.\n");
-                    client.managerViews.add(onlineUserListView);
+
                     OnlineUserListController onlineUserListController = new OnlineUserListController(client, onlineUserListView);
 
                 }
@@ -59,6 +61,7 @@ public class LoginController {
                 {
                     loginView.showMessage("Login failed!");
                     System.out.println("login failed.\n");
+
                 }
             }
             else{

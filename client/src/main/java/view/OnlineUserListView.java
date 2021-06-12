@@ -4,6 +4,7 @@ import services.ManagerView;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.util.List;
 
 public class OnlineUserListView extends javax.swing.JFrame implements ManagerView {
@@ -25,7 +26,6 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
         setResizable(false);
 
     }
-
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
@@ -100,11 +100,19 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
     @Override
     public void showListUserOnline(List<String> users)
     {
+        userListModel.clear();
        for (int i = 0; i < users.size(); i++)
        {
            userListModel.add(i, users.get(i));
        }
 
+    }
+    public String getUserSelectedValue()
+    {
+        return userList.getSelectedValue();
+    }
+    public void addMouseClickListener(MouseAdapter mouseClickListener) {
+        userList.addMouseListener(mouseClickListener);
     }
     public void addChatListener(ActionListener actionListener)
     {
@@ -115,5 +123,9 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
         joinGroupBtn.addActionListener(actionListener);
     }
 
+    public void addLogoutListener(ActionListener actionListener)
+    {
+        logoutBtn.addActionListener(actionListener);
+    }
 }
 
