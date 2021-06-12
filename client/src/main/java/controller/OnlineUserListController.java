@@ -1,9 +1,11 @@
 package controller;
 
+import lombok.SneakyThrows;
 import services.Connection;
 import view.OnlineUserListView;
 
 import java.awt.event.*;
+import java.io.IOException;
 
 public class OnlineUserListController {
     OnlineUserListView onlineUserListView;
@@ -28,9 +30,11 @@ public class OnlineUserListController {
     class LogoutListener implements ActionListener
     {
 
+        @SneakyThrows
         @Override
         public void actionPerformed(ActionEvent e) {
             client.logout(client.getUsername());
+            onlineUserListView.setVisible(false);
         }
     }
     class MouseClickListener extends MouseAdapter {

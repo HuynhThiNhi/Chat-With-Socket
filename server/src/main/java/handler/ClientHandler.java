@@ -65,6 +65,13 @@ public class ClientHandler extends Thread {
                             sendMessageToUserSpecific(tokens);
                             break;
                         }
+                        case  "DISCONNECT":
+                        {
+                            //out.write((StatusCode.OK.toString() + "\n").getBytes());
+                           responseLogout(tokens[1]);
+
+                           break;
+                        }
                     }
                 }
 
@@ -142,6 +149,16 @@ public class ClientHandler extends Thread {
             }
 
         }
+    }
+    public void responseLogout(String username) throws IOException {
+        ClientHandler logoutClient = server.getClientHandlers().stream().filter(clientHandler -> username.equals(clientHandler.getUserName())).findFirst().orElse(null);
+        server.getClientHandlers().remove(logoutClient);
+
+        List<ClientHandler> onlineUsers = server.getUserOnline();
+        for (ClientHandler client : onlineUsers) {
+            client. sendMessage("LOGOUT "+ username + "\n");
+        }
+
     }
 
     public void responseSignUp(String[] tokens) {

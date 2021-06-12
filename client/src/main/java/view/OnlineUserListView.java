@@ -107,6 +107,11 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
        }
 
     }
+    @Override
+    public void userLogout(String username)
+    {
+        userListModel.removeElement(username);
+    }
     public String getUserSelectedValue()
     {
         return userList.getSelectedValue();

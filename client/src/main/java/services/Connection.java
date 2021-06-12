@@ -99,6 +99,15 @@ public class Connection {
 
     public void logout(String username)
     {
+        LogoutService.logoutService(out,username);
+        try {
+            in.close();
+            out.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
     public boolean signup(String username, String password) {
@@ -119,6 +128,7 @@ public class Connection {
         Thread thread = new Thread() {
             @Override
             public void run() {
+
                 try {
                     String line;
                     while ((line = bufferedReader.readLine()) != null) {
@@ -132,6 +142,12 @@ public class Connection {
                                 case "SEND_MESSAGE_TO_USER_SPECIFIC": {
 
                                     readingMessage(tokens);
+                                    break;
+                                }
+                                case "LOGOUT":
+                                {
+                                    System.out.println("ok");
+                                    sendInfoLogoutToUsers(tokens[1]);
                                     break;
                                 }
                                 default: {
@@ -149,6 +165,13 @@ public class Connection {
 
     }
 
+    void sendInfoLogoutToUsers(String username) throws IOException {
+        System.out.println(1);
+        for (ManagerView managerView : managerViews) {
+            managerView.userLogout(username);
+        }
+
+    }
     public void updateListOnlineUsers(List<String> users) {
 
         for (ManagerView managerView : managerViews) {

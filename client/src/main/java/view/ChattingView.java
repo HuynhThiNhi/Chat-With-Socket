@@ -47,6 +47,7 @@ public class ChattingView extends javax.swing.JFrame {
         return receiver;
     }
 
+
     @SuppressWarnings("unchecked")
 
     private void initComponents() {
