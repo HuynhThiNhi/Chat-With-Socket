@@ -1,12 +1,12 @@
 import connect.Server;
+import controller.ServerController;
 
 
 public class MainServer {
     public static void main(String[] args) {
 
-        Server server = new Server(8080);
-        server.start();
 
+        ServerController serverController = new ServerController();
 
     }
 }

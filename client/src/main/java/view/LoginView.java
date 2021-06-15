@@ -110,6 +110,8 @@ public class LoginView extends javax.swing.JFrame {
     }
     public void showLoginView()
     {
+        txtUserName.setText("");
+        txtPassword.setText("");
         this.setVisible(true);
     }
    public String getUserName()

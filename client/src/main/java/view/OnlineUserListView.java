@@ -10,7 +10,7 @@ import java.util.List;
 public class OnlineUserListView extends javax.swing.JFrame implements ManagerView {
 
     // Variables declaration - do not modify
-    private javax.swing.JButton chatBtn;
+    private javax.swing.JButton createGroupBtn;
     private javax.swing.JButton joinGroupBtn;
     private javax.swing.JLabel onlineUsersLabel;
     private JButton logoutBtn;
@@ -33,10 +33,10 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
         jPanel1 = new javax.swing.JPanel();
 
         onlineUsersLabel = new javax.swing.JLabel();
-        chatBtn = new javax.swing.JButton();
+        createGroupBtn = new javax.swing.JButton();
         joinGroupBtn = new javax.swing.JButton();
         onlineUsersLabel.setText("Online Users");
-        chatBtn.setText("Chat");
+        createGroupBtn.setText("Create Group");
         joinGroupBtn.setText("Join Group");
         logoutBtn = new JButton("Logout");
         userListModel = new DefaultListModel<>();
@@ -52,7 +52,7 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(chatBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(createGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                         .addComponent(joinGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -75,7 +75,7 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
                                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGap(50, 50, 50)
-                                                .addComponent(chatBtn)
+                                                .addComponent(createGroupBtn)
                                                 .addGap(27, 27, 27)
                                                 .addComponent(joinGroupBtn)
                                                 .addGap(29, 29, 29)
@@ -93,7 +93,6 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
         pack();
     }
 
@@ -111,6 +110,7 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
     public void userLogout(String username)
     {
         userListModel.removeElement(username);
+
     }
     public String getUserSelectedValue()
     {
@@ -118,10 +118,11 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
     }
     public void addMouseClickListener(MouseAdapter mouseClickListener) {
         userList.addMouseListener(mouseClickListener);
+
     }
-    public void addChatListener(ActionListener actionListener)
+    public void addCreateGroupListener(ActionListener actionListener)
     {
-        chatBtn.addActionListener(actionListener);
+        createGroupBtn.addActionListener(actionListener);
     }
     public void addJoinGroup(ActionListener actionListener)
     {
@@ -131,6 +132,11 @@ public class OnlineUserListView extends javax.swing.JFrame implements ManagerVie
     public void addLogoutListener(ActionListener actionListener)
     {
         logoutBtn.addActionListener(actionListener);
+    }
+
+    public static void main(String[] args) {
+        OnlineUserListView onl = new OnlineUserListView("nhi");
+        onl.setVisible(true);
     }
 }
 

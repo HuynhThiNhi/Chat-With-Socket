@@ -67,7 +67,6 @@ public class ClientHandler extends Thread {
                         }
                         case  "DISCONNECT":
                         {
-                            //out.write((StatusCode.OK.toString() + "\n").getBytes());
                            responseLogout(tokens[1]);
 
                            break;
@@ -133,6 +132,7 @@ public class ClientHandler extends Thread {
             for (User user : userList) {
                 if (user.getUserName().equals(tokens[1]) && user.getPassWord().equals(tokens[2])) {
                     try {
+                       server.addUserToList(user.getUserName());
                         this.onlineUser = new User(user.getUserName(), user.getPassWord());
                         out.write((StatusCode.OK.toString() + "\n").getBytes());
 
@@ -151,6 +151,8 @@ public class ClientHandler extends Thread {
         }
     }
     public void responseLogout(String username) throws IOException {
+        server.removeUserToList(username);
+
         ClientHandler logoutClient = server.getClientHandlers().stream().filter(clientHandler -> username.equals(clientHandler.getUserName())).findFirst().orElse(null);
         server.getClientHandlers().remove(logoutClient);
 

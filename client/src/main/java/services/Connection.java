@@ -24,12 +24,15 @@ public class Connection {
     public List<ManagerView> managerViews = new ArrayList<>();
 
 
+
+
     public Connection(String ip, int port) {
         this.ip = ip;
         this.port = port;
         startConnection();
 
     }
+
 
     public String getUsername() {
         return username;
@@ -48,22 +51,7 @@ public class Connection {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        finally {
-//            try {
-//                if (in != null) {
-//                    in.close();
-//                }
-//                if (out != null) {
-//                    out.close();
-//                }
-//                if (clientSocket != null) {
-//                    System.out.println("client disconnect");
-//                    clientSocket.close();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
     }
 
 
@@ -97,19 +85,13 @@ public class Connection {
         return false;
     }
 
-    public void logout(String username)
+    public void  logout(String username)
     {
         LogoutService.logoutService(out,username);
-        try {
-            in.close();
-            out.close();
-            clientSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
     }
+
     public boolean signup(String username, String password) {
         return SignUpService.requestSignUp(out, bufferedReader, username, password);
     }
@@ -146,7 +128,6 @@ public class Connection {
                                 }
                                 case "LOGOUT":
                                 {
-                                    System.out.println("ok");
                                     sendInfoLogoutToUsers(tokens[1]);
                                     break;
                                 }
@@ -166,10 +147,11 @@ public class Connection {
     }
 
     void sendInfoLogoutToUsers(String username) throws IOException {
-        System.out.println(1);
         for (ManagerView managerView : managerViews) {
             managerView.userLogout(username);
+
         }
+
 
     }
     public void updateListOnlineUsers(List<String> users) {
@@ -180,7 +162,6 @@ public class Connection {
                 managerView.showListUserOnline(users);
         }
     }
-
     public void readListOnlineUsers(String line) {
 
         List<String> users = new LinkedList<>(Arrays.asList(line.split(" ")));

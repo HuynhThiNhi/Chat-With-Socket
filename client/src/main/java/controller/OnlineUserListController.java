@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import services.Connection;
 import view.OnlineUserListView;
 
+import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
 
@@ -18,25 +19,28 @@ public class OnlineUserListController {
         this.client = client;
         showListUsersOnline();
         onlineUserListView.setVisible(true);
-        onlineUserListView.addChatListener(new ChatListener());
+        onlineUserListView.addCreateGroupListener(new CreateGroupListener());
         onlineUserListView.addJoinGroup(new JoinGroupListener());
         onlineUserListView.addMouseClickListener(new MouseClickListener());
         onlineUserListView.addLogoutListener(new LogoutListener());
     }
+
     void showListUsersOnline() {
         client.getListUserOnline();
 
     }
-    class LogoutListener implements ActionListener
-    {
+
+    class LogoutListener implements ActionListener {
 
         @SneakyThrows
         @Override
         public void actionPerformed(ActionEvent e) {
             client.logout(client.getUsername());
             onlineUserListView.setVisible(false);
+
         }
     }
+
     class MouseClickListener extends MouseAdapter {
 
         @Override
@@ -49,7 +53,7 @@ public class OnlineUserListController {
         }
     }
 
-    class ChatListener implements ActionListener {
+    class CreateGroupListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
