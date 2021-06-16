@@ -3,10 +3,8 @@ package controller;
 import lombok.SneakyThrows;
 import services.Connection;
 import view.OnlineUserListView;
-
-import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
+
 
 public class OnlineUserListController {
     OnlineUserListView onlineUserListView;
@@ -56,6 +54,7 @@ public class OnlineUserListController {
     class CreateGroupListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            CreateGroupController createGroupController = new CreateGroupController(client);
 
         }
     }
@@ -64,6 +63,8 @@ public class OnlineUserListController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+
+            JoinGroupController joinGroupController = new JoinGroupController(client);
 
         }
     }

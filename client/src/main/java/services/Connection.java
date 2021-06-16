@@ -7,10 +7,7 @@ import view.ChattingView;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class Connection {
@@ -72,6 +69,20 @@ public class Connection {
 
     }
 
+    public void readingGroupMessage(String[] tokens)
+    {
+
+        String receiver = tokens[1];
+        String sender = tokens[2];
+        String message =  "";
+        for (int i = 3; i < tokens.length; i++)
+            message = message + " " + tokens[i];
+        List<ChattingView> chattingViewList = ManagerChattingViews.chattingViews.stream().filter(chattingView -> receiver.equals(chattingView.getReceiver()) && !(sender.equals(chattingView.getSender()))).toList();
+        System.out.println(chattingViewList.size());
+        for (ChattingView chatting : chattingViewList) {
+            chatting.addMessageToViewChatting(sender, message);
+        }
+    }
     public void sendMessage(String receiver, String message) {
         SendMessageService.sendMessage(out, message, receiver);
     }
@@ -131,6 +142,11 @@ public class Connection {
                                     sendInfoLogoutToUsers(tokens[1]);
                                     break;
                                 }
+                                case "GROUP":
+                                {
+                                    readingGroupMessage(tokens);
+                                    break;
+                                }
                                 default: {
                                     readListOnlineUsers(line);
                                 }
@@ -151,7 +167,6 @@ public class Connection {
             managerView.userLogout(username);
 
         }
-
 
     }
     public void updateListOnlineUsers(List<String> users) {

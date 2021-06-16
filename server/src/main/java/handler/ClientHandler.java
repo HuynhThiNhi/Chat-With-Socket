@@ -62,7 +62,11 @@ public class ClientHandler extends Thread {
                         }
                         case "SEND_MESSAGE_TO_USER_SPECIFIC":
                         {
-                            sendMessageToUserSpecific(tokens);
+                            String receiver = tokens[1];
+                            if(!(receiver.charAt(0) == '$'))
+                                sendMessageToUserSpecific(tokens);
+                            else
+                                sendMessageToGroup(tokens);
                             break;
                         }
                         case  "DISCONNECT":
@@ -88,6 +92,18 @@ public class ClientHandler extends Thread {
         }
     }
 
+    public void sendMessageToGroup(String[] tokens)
+    {
+        String message = "";
+        for (int i = 2; i < tokens.length; i++)
+            message = message + " " + tokens[i];
+        List<ClientHandler> clientHandlers = server.getClientHandlers().stream().filter(clientHandler -> !(getUserName().equals(clientHandler.getUserName()))).toList();
+        System.out.println(clientHandlers.size());
+        for (ClientHandler clientHandler: clientHandlers) {
+            clientHandler.sendMessage(Action.GROUP.toString() + " " + tokens[1] + " " + getUserName() + " " + message + "\n");
+            return;
+        }
+    }
     public boolean  sendMessageToUserSpecific(String[] tokens) {
 
         String receiver = tokens[1];

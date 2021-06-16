@@ -4,19 +4,19 @@ package view;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
-public class CreateGroupView extends javax.swing.JFrame {
+public class JoinGroupView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify
-    private java.awt.Button createBtn;
+    private java.awt.Button joinBtn;
     private javax.swing.JTextField groupNameTxt;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration
-    private String creator;
 
-    public CreateGroupView() {
+
+    public JoinGroupView() {
         initComponents();
-        this.setTitle("Create Group");
+        this.setTitle("Join Group");
         this.setVisible(true);
         this.setResizable(false);
     }
@@ -28,13 +28,13 @@ public class CreateGroupView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         groupNameTxt = new javax.swing.JTextField();
-        createBtn = new java.awt.Button();
+        joinBtn = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setText("Group Name:");
 
-        createBtn.setLabel("Create");
+        joinBtn.setLabel("Join");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -50,7 +50,7 @@ public class CreateGroupView extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addComponent(createBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(joinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(0, 95, Short.MAX_VALUE))
                                                         .addComponent(groupNameTxt))))
                                 .addContainerGap())
@@ -64,7 +64,7 @@ public class CreateGroupView extends javax.swing.JFrame {
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(groupNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                                .addComponent(createBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(joinBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(21, 21, 21))
         );
 
@@ -86,10 +86,6 @@ public class CreateGroupView extends javax.swing.JFrame {
         return groupNameTxt.getText().trim();
     }
 
-    public void setCreator(String creator)
-    {
-        this.creator = creator;
-    }
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
@@ -100,8 +96,8 @@ public class CreateGroupView extends javax.swing.JFrame {
         return true;
     }
 
-    public void addCreateListener(ActionListener actionListener) {
-        createBtn.addActionListener(actionListener);
+    public void addJoinListener(ActionListener actionListener) {
+        joinBtn.addActionListener(actionListener);
     }
 
 }

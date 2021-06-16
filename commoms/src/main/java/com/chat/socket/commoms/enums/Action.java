@@ -7,5 +7,6 @@ public enum  Action {
     DISCONNECT,
     SIGN_UP,
     SIGN_IN,
-    FILE
+    FILE,
+    GROUP
 }
