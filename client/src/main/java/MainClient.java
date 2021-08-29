@@ -21,7 +21,7 @@ public class MainClient {
 //        }
 
         ClientController clientController = new ClientController();
-        System.out.println("demo github");
+
 
     }
 
