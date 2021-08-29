@@ -25,6 +25,7 @@ public class JoinGroupController {
         public void actionPerformed(ActionEvent e) {
 
             List<String> groupNames = CreateGroupController.readGroupsFromFile();
+            System.out.println(groupNames);
             String nameGroup = joinGroupView.getNameGroup();
             if(!groupNames.contains(nameGroup))
             {

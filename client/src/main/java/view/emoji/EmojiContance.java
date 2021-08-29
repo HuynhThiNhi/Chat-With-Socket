@@ -3,6 +3,8 @@ package view.emoji;
 import java.util.LinkedList;
 import java.util.List;
 
+
+// file tham khao
 public class EmojiContance {
     public static List<String[]> getAllEmojisSortedByCategory() {
         List<String[]> all = new LinkedList<String[]>();

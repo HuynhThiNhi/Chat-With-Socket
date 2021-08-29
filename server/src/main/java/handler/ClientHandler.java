@@ -13,6 +13,7 @@ import lombok.SneakyThrows;
 import model.User;
 
 
+
 public class ClientHandler extends Thread {
     private final Socket client;
     private final Server server;
@@ -38,13 +39,23 @@ public class ClientHandler extends Thread {
     public void run() {
         try {
             String line;
-
+            String request ="";
+            String[] tokens;
             while ((line = bufferedReader.readLine()) != null) {
 
-                String[] tokens = line.split(" ");
-                if (tokens.length != 0) {
 
-                    String request = tokens[0];
+                if (line.charAt(0) == ' ')
+                {
+                    tokens = line.split("&");
+                    request = "FILE";
+                }
+                else
+                {
+                    tokens = line.split(" ");
+                    if(tokens.length > 0)
+                        request = tokens[0];
+                }
+                if (tokens.length != 0) {
 
                     switch (request) {
 
@@ -74,6 +85,36 @@ public class ClientHandler extends Thread {
                            responseLogout(tokens[1]);
 
                            break;
+                        }
+                        case "FILE":
+                        {
+
+                            String header = tokens[0].trim();
+                            String receiver = header.split(" ")[0];
+                            ClientHandler clientHandler = server.getClientHandlers().stream().filter(clientHandler1 -> receiver.equals(clientHandler1.getUserName())).findFirst().orElse(null);
+
+                            if (clientHandler != null)
+                            {
+                                System.out.println(clientHandler.getUserName());
+                                clientHandler.sendMessage(" " + getUserName() + " " + header.split(" ")[1] + "&" + tokens[1] + "\n");
+                            }
+                            break;
+                        }
+                        default:
+                        {
+//                            System.out.println("da vo");
+//                            System.out.println(line);
+//
+//                            String header = tokens[0].trim();
+//                            String receiver = header.split(" ")[0];
+//                            ClientHandler clientHandler = server.getClientHandlers().stream().filter(clientHandler1 -> receiver.equals(clientHandler1.getUserName())).findFirst().orElse(null);
+//
+//                            if (clientHandler != null)
+//                            {
+//                                System.out.println(clientHandler.getUserName());
+//                                clientHandler.sendMessage(" " + getUserName() + " " + header.split(" ")[1] + "&" + tokens[1] + "\n");
+//                            }
+//                            return;
                         }
                     }
                 }
@@ -138,9 +179,7 @@ public class ClientHandler extends Thread {
             if(client.getUserName() != null)
                 client.sendMessage(response);
         }
-
     }
-
     public void responseLogIn(String[] tokens) {
         if (tokens.length == 3) {
 
@@ -214,4 +253,9 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
         }
     }
+
+//    public static void main(String[] args) {
+//        String test = "e abc&dd";
+//        System.out.println(test.split("&")[0]);
+//    }
 }

@@ -53,6 +53,7 @@ public class CreateGroupController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public static List<String> readGroupsFromFile() {

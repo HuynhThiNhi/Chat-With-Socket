@@ -2,7 +2,9 @@ package controller;
 
 import services.Connection;
 import services.ManagerChattingViews;
+import services.ManagerReceiveFile;
 import view.ChattingView;
+import view.ReceiveFileView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,10 +14,11 @@ public class ChattingController {
     Connection client;
     ChattingView chattingView;
     String receiver;
+    ReceiveFileView receiveFileView;
 
     ChattingController(Connection connection, String receiver) {
 
-        if (!ChattingView.receiverList.contains(receiver) || receiver.charAt(0) == '$') {
+      //  if (!ChattingView.receiverList.contains(receiver) || receiver.charAt(0) == '$') {
 
             this.client = connection;
             this.receiver = receiver;
@@ -30,9 +33,12 @@ public class ChattingController {
             chattingView.addSendFileListener(new SendFileListener());
             chattingView.addMessageListener(new MessageListener());
 
+            ReceiveFileView receiveFileView = new ReceiveFileView();
+            ManagerReceiveFile.receiveFileViews.add(receiveFileView);
             ManagerChattingViews.chattingViews.add(chattingView);
 
-        }
+
+      //  }
 
     }
 
@@ -70,6 +76,7 @@ public class ChattingController {
     class SendFileListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            SendFileController sendFileController = new SendFileController(client, receiver);
         }
     }
 
