@@ -27,11 +27,12 @@ public class ManageUser {
             while ((line = bufferedReader.readLine()) != null)
             {
                 String[] tokens = line.split(" ");
-                String username = tokens[0];
-                String password = tokens[1];
+
 
                 if(tokens.length == 2)
                 {
+                    String username = tokens[0];
+                    String password = tokens[1];
                     User user = new User(username,password);
                     userList.add(user);
                 }
